@@ -1,7 +1,6 @@
 '''
 input:data/allcitation_final_modify.csv
 output:data/allcitation_final2.csv
-Note!!!: here, I changed the names of 
 This program is to re-analyze the self-citations,after all those works done by pubmed websearch and mannual corrections
 For each paper id, we hava a dict with clusterid:authors
 we also have the citations for each paper.

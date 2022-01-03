@@ -6,7 +6,7 @@ After this round, final check of allcitation_final2_reformat.csv, especiall the 
 correct "selfcitations" values if nessesary.
 This program summarize the results from getcitations_8.py:
 1. reformat the citation results, making it more convenitent for mannual inspections
-2. get a summary citation results from each paper
+#2. get a summary citation results from each paper
 '''
 import pandas as pd
 
