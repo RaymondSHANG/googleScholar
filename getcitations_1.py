@@ -1,4 +1,6 @@
 '''
+input: your google profile id: user=APooktAAAAAJ
+output:data/allPapers_citationNumbers.csv
 This is the first step of my google scholar analytics
 This program gets your google-scholar profile, extract all your publications:
 "title": title_all, 

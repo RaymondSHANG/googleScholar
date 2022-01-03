@@ -1,6 +1,12 @@
 '''
+input1: your pubmed email, api_key number
+input2: data/allcitation_merge.csv
+output1:data/pub_files.txt
+
+The authorlist from googlescholar is not complete
 This program further searches author names for 
-the source papers using query results from pubmed database
+the source papers using query results from pubmed database using pymed packages
+for each paper, search in both pubmed and pmc database
 '''
 from pymed import PubMed
 import pandas as pd
@@ -15,7 +21,7 @@ pubmed._rateLimit = 10
 
 
 def append_record(record):
-    with open('pub_files.txt', 'a') as f:
+    with open('data/pub_files.txt', 'a') as f:
         json.dump(record, f)
         f.write(os.linesep)
 
@@ -44,7 +50,7 @@ def getpubaus(authos_pub):
 
 
 allcitations = pd.read_csv(
-    "allcitation_merge.csv", header=0)  # ,nrows=2
+    "data/allcitation_merge.csv", header=0)  # ,nrows=2
 ## PUT YOUR SEARCH TERM HERE ##
 # id_source,title_source,authors_source,url_source,cited_by_source,id_target,title,totalCitations,url,clusterid,authors
 
@@ -73,15 +79,27 @@ for i in range(len(search_terms)):
     print(f"Pubmed search for {i}th article:\n#######################")
     print(search_term)
     print("#######################")
-    results = pubmed.query(search_term, max_results=20)
     articleList = []
-    #
-
+    # Firstly, seach pubmed database
+    pubmed.parameters["db"] = "pubmed"
+    results = pubmed.query(search_term, max_results=20)
     for article in results:
         # Print the type of object we've found (can be either PubMedBookArticle or PubMedArticle).
         # We need to convert it to dictionary with available function
         articleDict = article.toDict()
-        articleList.append(articleDict)
+        if articleDict not in articleList:
+            articleList.append(articleDict)
+    # Search PMC database for a second time. I found PMC and pubmed some times returns different results
+    pubmed.parameters["db"] = "pmc"
+    results2 = pubmed._getArticleIds(query=search_term, max_results=10)
+    if len(list(results2)) > 0:
+        pubmed.parameters["db"] = "pubmed"
+        results3 = pubmed._getArticles(article_ids=results3)
+        for result in results3:
+            articleDict = result.toDict()
+            print(articleDict['title'])  # title_pubmed = article['title']
+            if articleDict not in articleList:
+                articleList.append(articleDict)
 
     # Generate list of dict records which will hold all article details that could be fetch from PUBMED API
     found = False
@@ -113,7 +131,7 @@ for i in range(len(search_terms)):
         # print("---------------------")
         if SequenceMatcher(None, title_pubmed.upper(), title_source).ratio() > 0.8:
             found = True
-            print("Find match for:")
+            print("************Find match for:")
             print(title_pubmed)
             # append df infomation
             au_pub = getpubaus(article['authors'])
@@ -133,7 +151,7 @@ for i in range(len(search_terms)):
             break
         if lastau_pubmed is not None and lastau_pubmed == authors_source_last:
             found = True
-            print(f"Find potential match for:{title_source}")
+            print(f"*****Find potential match for:{title_source}")
             print(title_pubmed)
             # append
             au_pub = getpubaus(article['authors'])

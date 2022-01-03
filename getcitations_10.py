@@ -1,6 +1,13 @@
+'''
+input:  data/allcitation_final2_reformat_modify.csv
+output: data/allcitations_summary.csv
+This program re-analyzed the citations after mannual inspections, and get the final results including
+1. allcitations_summary.csv
+'''
 import pandas as pd
 
-allcitations = pd.read_csv("allcitation_final2_reformat_modify.csv", header=0)
+allcitations = pd.read_csv(
+    "data/allcitation_final2_reformat_modify.csv", header=0)
 print(allcitations.shape)
 print(len(list(allcitations.titleMatch)))
 print(allcitations.columns)
@@ -32,7 +39,7 @@ print(allcitations_summary[['title', 'selfcitationrate']])
 print("total citation rate:")
 print(sum(allcitations_summary['selfcitations']) /
       sum(allcitations_summary['total']))
-allcitations_summary.to_csv("allcitations_summary.csv", index=False)
+allcitations_summary.to_csv("data/allcitations_summary.csv", index=False)
 '''
 grouper = df2.groupby('id_target')
 print(grouper)

@@ -1,4 +1,7 @@
 '''
+input:data/allcitation_final_modify.csv
+output:data/allcitation_final2.csv
+Note!!!: here, I changed the names of 
 This program is to re-analyze the self-citations,after all those works done by pubmed websearch and mannual corrections
 For each paper id, we hava a dict with clusterid:authors
 we also have the citations for each paper.
@@ -17,7 +20,7 @@ import numpy as np
 #url_all = pubs.loc[:,'url']
 #url_all = url_all.tolist()
 allcitations = pd.read_csv(
-    "allcitation_final_modify.csv", header=0)  # ,nrows=2
+    "data/allcitation_final_modify.csv", header=0)  # ,nrows=2
 print(allcitations.shape)
 # print(allcitations.columns)
 # ['id_source', 'title_source', 'authors_source', 'url_source',
@@ -51,11 +54,11 @@ def formatAuthors(authors):
         elif currentlen == 2:
             if currentauthor[0].strip().isupper():
                 firstname = currentauthor[0].strip()
-                firstname = firstname[0]
+                #firstname = firstname[0]
             else:
                 firstname = currentauthor[0].strip()
                 firstname = firstname.upper()
-                firstname = firstname[0]
+                #firstname = firstname[0]
         else:
             for j in range(currentlen - 1):
                 tmp = currentauthor[j]
@@ -122,4 +125,4 @@ print("othercitations:\t" + str(n_other))
 if False:
     allcitations['authoerOverlaps'] = citationmarker1
     allcitations['selfcitations'] = citationmarker2
-    allcitations.to_csv("allcitation_final2.csv", index=False)
+    allcitations.to_csv("data/allcitation_final2.csv", index=False)

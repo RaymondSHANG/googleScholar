@@ -1,5 +1,11 @@
-#!/usr/bin/env python
-
+'''
+input:data/allPapers_citationNumbers.csv
+output1:data/allcitations.txt
+output2:data/allcitationNumbers.csv
+This program reads a set of goolge scholar papers(clusterid, url, etc)
+goes to the url, extract all one to one citation records based on clusterid
+The information of papers that cited your publications were also extracted, including citation numbers, authors, titles, etc
+'''
 import re
 import sys
 import json
@@ -18,7 +24,7 @@ seen = set()
 driver = None
 
 
-def getcite_onepaper(url, depth=0, pages=20, outputfile="result1", debug=False, citation_file="citation.txt"):
+def getcite_onepaper(url, depth=0, pages=20, outputfile="data/result1", debug=False, citation_file="data/citation.txt"):
     global driver
 
     # ready to start up headless browser
@@ -223,10 +229,10 @@ def remove_nones(d):
 # Using readlines()
 driver = webdriver.Chrome()
 
-pubs = pd.read_csv('allPapers_citationNumbers.csv', header=0, nrows=23)
+pubs = pd.read_csv('data/allPapers_citationNumbers.csv', header=0, nrows=23)
 print(pubs.columns)
 print(pubs['url'])
-citation_file = "allcitations.txt"
+citation_file = "data/allcitations.txt"
 #file2 = 'allpapers_summary.txt'
 count = 0
 # Index(['title', 'totalCitations', 'url', 'clusterid', 'authors'], dtype='object')
@@ -274,4 +280,4 @@ for i in range(pubs.shape[0]):  # pubs.shape[0]
 
     #print("Line{}: {}".format(count, line[0:1]))
 driver.close()
-df.to_csv("allcitationNumbers.csv", index=False)
+df.to_csv("data/allcitationNumbers.csv", index=False)

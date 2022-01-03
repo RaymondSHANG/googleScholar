@@ -1,3 +1,15 @@
+'''
+input1: pubmed email and api_key
+input2:data/allcitation_selfcitations.csv
+output:data/allcitation_final.csv
+output2(mannual inspection):data/allcitation_final_modify.csv
+
+I found the results from eutilies pubmed is different from pubmed web search.
+This program re-queries the results from getitations_4.py. 
+For those low/none matched results, re-query from pubmed websearch.
+After this round of running, you need to manual inspect all your results, mainly for those "none" and "low" titleMatch results
+Making any corrections if nessesary.
+'''
 from collections import Counter
 import pandas as pd
 import numpy as np
@@ -40,7 +52,7 @@ pubmed._rateLimit = 10
 
 
 allcitations = pd.read_csv(
-    "allcitation_selfcitations_modify.csv", header=0)  # ,nrows=2
+    "data/allcitation_selfcitations.csv", header=0)  # ,nrows=2
 print(allcitations.shape)
 print(allcitations.columns)
 '''
@@ -187,4 +199,4 @@ for i in range(allcitations.shape[0]):
             allcitations.loc[i, 'authors_pub'] = ""
             allcitations.loc[i, 'titleMatch'] = 'None'
 
-allcitations.to_csv("allcitation_final.csv", index=False)
+allcitations.to_csv("data/allcitation_final.csv", index=False)

@@ -1,6 +1,16 @@
+'''
+input:data/allcitation_final2.csv
+output1:data/allcitation_final2_reformat.csv
+output2(after mannual inspection):data/allcitation_final2_reformat_modify.csv
+After this round, final check of allcitation_final2_reformat.csv, especiall the author overlaps, 
+correct "selfcitations" values if nessesary.
+This program summarize the results from getcitations_8.py:
+1. reformat the citation results, making it more convenitent for mannual inspections
+2. get a summary citation results from each paper
+'''
 import pandas as pd
 
-allcitations = pd.read_csv("allcitation_final2.csv", header=0)
+allcitations = pd.read_csv("data/allcitation_final2.csv", header=0)
 print(allcitations.shape)
 print(len(list(allcitations.titleMatch)))
 print(allcitations.columns)
@@ -20,24 +30,10 @@ allcitations_reformat.columns = [
     'cited_by_source', 'id_target', 'title', 'authors', 'totalCitations',
     'url', 'authoerOverlaps', 'selfcitations']
 print(sum(allcitations['id_source'] != allcitations['clusterid_google']))
-allcitations_reformat.to_csv("allcitation_final2_reformat.csv", index=False)
+allcitations_reformat.to_csv(
+    "data/allcitation_final2_reformat.csv", index=False)
 
-df1 = allcitations_reformat[[
-    'id_target', 'title', 'authors', 'totalCitations',
-    'url']]
-df1 = df1.drop_duplicates()
-print(df1)
-df2 = allcitations_reformat[['id_target', 'selfcitations']]
-df2.loc[df2['selfcitations'] == -1, "selfcitations"] = 0
-df2 = df2.groupby('id_target')['selfcitations'].agg(
-    selfcitation='sum', total='count').reset_index()
-print(df2.shape)
-print(df2.columns)
-
-allcitations_summary = df1.merge(
-    df2, how="left", left_on="id_target", right_on="id_target")
-print(allcitations_summary)
-allcitations_summary.to_csv("allcitations_summary.csv", index=False)
+#allcitations_summary.to_csv("data/allcitations_summary.csv", index=False)
 '''
 grouper = df2.groupby('id_target')
 print(grouper)

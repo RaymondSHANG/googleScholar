@@ -1,7 +1,11 @@
 '''
+input:data/allcitation_pubMerge.csv
+output:data/allcitation_selfcitations.csv
+
 This program is to analyze the self-citations.
 For each paper id, we hava a dict with clusterid:authors
 we also have the citations for each paper.
+Note!!!: if the length of one author <=2: keep all the name information
 The output will be a dataframe:
 paperid papertitle totalCitation selfcitation
 '''
@@ -16,7 +20,8 @@ import numpy as np
 
 #url_all = pubs.loc[:,'url']
 #url_all = url_all.tolist()
-allcitations = pd.read_csv("allcitation_pubMerge.csv", header=0)  # ,nrows=2
+allcitations = pd.read_csv(
+    "data/allcitation_pubMerge.csv", header=0)  # ,nrows=2
 print(allcitations.shape)
 # print(allcitations.columns)
 # ['id_source', 'title_source', 'authors_source', 'url_source',
@@ -118,4 +123,4 @@ print("othercitations:\t" + str(n_other))
 
 allcitations['authoerOverlaps'] = citationmarker1
 allcitations['selfcitations'] = citationmarker2
-allcitations.to_csv("allcitation_selfcitations.csv", index=False)
+allcitations.to_csv("data/allcitation_selfcitations.csv", index=False)
