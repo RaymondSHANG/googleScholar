@@ -1,9 +1,17 @@
+'''
+This is the first step of my google scholar analytics
+This program gets your google-scholar profile, extract all your publications:
+"title": title_all, 
+"totalCitations": citation_all,
+"url": citationUrl_all, 
+"clusterid": clusterid_all, 
+"authors": authors_all
+'''
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
-
 import time
 import random
 from bs4 import BeautifulSoup
@@ -106,4 +114,4 @@ for p in paper_records:
 df1 = pd.DataFrame({"title": title_all, "totalCitations": citation_all,
                    "url": citationUrl_all, "clusterid": clusterid_all, "authors": authors_all})
 print(df1.shape, "df1 shape")
-df1.to_csv("allPapers_citationNumbers.csv", index=False)
+df1.to_csv("data/allPapers_citationNumbers.csv", index=False)
