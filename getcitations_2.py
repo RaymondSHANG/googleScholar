@@ -7,13 +7,10 @@ goes to the url, extract all one to one citation records based on clusterid
 The information of papers that cited your publications were also extracted, including citation numbers, authors, titles, etc
 '''
 import re
-import sys
-import json
+
 import time
 import random
-import argparse
-import networkx
-import math
+
 import requests_html
 import pandas as pd
 from selenium import webdriver
@@ -22,38 +19,6 @@ from urllib.parse import urlparse, parse_qs
 
 seen = set()
 driver = None
-
-
-def getcite_onepaper(url, depth=0, pages=20, outputfile="data/result1", debug=False, citation_file="data/citation.txt"):
-    global driver
-
-    # ready to start up headless browser
-
-    # create our graph that will get populated
-    g = networkx.DiGraph()
-
-    # iterate through all the citation links
-    for from_pub, to_pub in get_citations(url, depth=depth, pages=pages):
-        if debug:
-            print('from: %s' % json.dumps(from_pub))
-        g.add_node(from_pub['id'], label=from_pub['title'],
-                   **remove_nones(from_pub))
-        if to_pub:
-            if debug:
-                print('to: %s' % json.dumps(to_pub))
-            print('%s -> %s' % (from_pub['id'], to_pub['id']))
-            with open(citation_file, 'a+') as f:
-                f.write('%s -> %s\n' % (from_pub['id'], to_pub['id']))
-            g.add_node(to_pub['id'], label=to_pub['title'],
-                       **remove_nones(to_pub))
-            g.add_edge(from_pub['id'], to_pub['id'])
-
-    # write the output files
-    networkx.write_gexf(g, '%s.gexf' % outputfile)
-    write_html(g, '%s.html' % outputfile)
-
-    # close the browser
-    # driver.close()
 
 
 def get_cluster_id(url):

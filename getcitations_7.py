@@ -21,6 +21,14 @@ import requests
 import re
 from bs4 import BeautifulSoup
 
+parameters_user = pd.read_json('parameters.txt', orient='records', lines=True)
+pubemail = str(parameters_user.loc[0, 'pubemail']).strip()
+my_api_key = str(parameters_user.loc[0, 'api_key']).strip()
+
+pubmed = PubMed(tool="PubMedSearcher", email=pubemail)
+pubmed.parameters.update({'api_key': my_api_key})
+pubmed._rateLimit = 10
+
 
 def getpubaus(authos_pub):
     '''
@@ -43,12 +51,6 @@ def getpubaus(authos_pub):
             continue
         aus.append(onename)
     return ",".join(aus)
-
-
-pubmed = PubMed(tool="PubMedSearcher", email="yshang@email.arizona.edu")
-my_api_key = '5f2915a6f64423e63e34e3002b25f4f9bf08'
-pubmed.parameters.update({'api_key': my_api_key})
-pubmed._rateLimit = 10
 
 
 allcitations = pd.read_csv(

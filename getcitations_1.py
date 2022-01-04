@@ -18,12 +18,14 @@ import time
 import random
 from bs4 import BeautifulSoup
 import pandas as pd
-import numpy as np
+
+parameters_user = pd.read_json('parameters.txt', orient='records', lines=True)
+gid = str(parameters_user.loc[0, 'gid']).strip()
 
 driver = webdriver.Chrome("/usr/local/bin/chromedriver")
 # &cstart=100&pagesize=100
 driver.get(
-    'https://scholar.google.com/citations?hl=en&user=APooktAAAAAJ&hl=en&cstart=0&pagesize=100')
+    f'https://scholar.google.com/citations?hl=en&user={gid}&hl=en&cstart=0&pagesize=100')
 
 try:
     # Scroll down to bottom
@@ -41,7 +43,7 @@ finally:
 
 html_source = driver.page_source
 soup = BeautifulSoup(html_source, 'html.parser')
-
+driver.close()
 # with open("allpubs.html") as fp:
 #    soup = BeautifulSoup(fp, 'html.parser')
 #   <tr class="gsc_a_tr">
@@ -105,7 +107,7 @@ for p in paper_records:
         authors = p2[0].getText()
         print("New Detailed Authors:\t", authors)
 
-    print("######\n")
+    print(f"######{clusterid}\n")
 
     title_all.append(paper_title)
     citation_all.append(citations)
@@ -113,6 +115,8 @@ for p in paper_records:
     clusterid_all.append(clusterid)
     authors_all.append(authors)
 
+driver.close()
+#citation_all = [int(a) for a in citation_all]
 df1 = pd.DataFrame({"title": title_all, "totalCitations": citation_all,
                    "url": citationUrl_all, "clusterid": clusterid_all, "authors": authors_all})
 print(df1.shape, "df1 shape")

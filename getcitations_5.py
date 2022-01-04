@@ -14,6 +14,7 @@ import os
 
 allcitations = pd.read_csv("data/allcitation_merge.csv", header=0)  # ,nrows=2
 print(allcitations.shape)
+allcitations['id_source'] = allcitations['id_source'].astype(str)
 tmp1 = allcitations.id_source
 tmp1_set = set(tmp1)
 print(len(tmp1_set))
@@ -22,7 +23,10 @@ print(len(tmp1_set))
 # Some papers cites more than one of my publications
 
 
-ausPubmed = pd.read_json('data/pub_files.txt', orient='records', lines=True)
+ausPubmed = pd.read_json('data/pub_files.txt',
+                         orient='records', lines=True, dtype={})
+print(ausPubmed['clusterid_google'])
+ausPubmed['clusterid_google'] = ausPubmed['clusterid_google'].astype(str)
 ausPubmed.to_csv("data/pub_files.csv", index=False)
 ausPubmed2 = ausPubmed.drop_duplicates(
     subset=ausPubmed.columns.difference(['index_source']))

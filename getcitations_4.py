@@ -13,9 +13,11 @@ import pandas as pd
 from difflib import SequenceMatcher
 import json
 import os
+parameters_user = pd.read_json('parameters.txt', orient='records', lines=True)
+pubemail = str(parameters_user.loc[0, 'pubemail']).strip()
+my_api_key = str(parameters_user.loc[0, 'api_key']).strip()
 
-pubmed = PubMed(tool="PubMedSearcher", email="yshang@email.arizona.edu")
-my_api_key = '5f2915a6f64423e63e34e3002b25f4f9bf08'
+pubmed = PubMed(tool="PubMedSearcher", email=pubemail)
 pubmed.parameters.update({'api_key': my_api_key})
 pubmed._rateLimit = 10
 
@@ -53,7 +55,7 @@ allcitations = pd.read_csv(
     "data/allcitation_merge.csv", header=0)  # ,nrows=2
 ## PUT YOUR SEARCH TERM HERE ##
 # id_source,title_source,authors_source,url_source,cited_by_source,id_target,title,totalCitations,url,clusterid,authors
-
+# print(allcitations)
 search_terms = allcitations['title_source'].values.tolist()
 # allcitations.loc[:,'authors_source']
 aus_terms = allcitations['authors_source'].values.tolist()
@@ -61,8 +63,10 @@ title_terms = allcitations['title_source'].values.tolist()
 id_terms = allcitations['id_source'].values.tolist()
 tip = 0
 articleInfo = []
+# print(search_terms)
 for i in range(len(search_terms)):
     search_term = search_terms[i]
+    # print(search_term)
     authors_source = str(aus_terms[i])
     authors_source = authors_source.split(",")
     authors_source_last = authors_source[0]
@@ -73,7 +77,7 @@ for i in range(len(search_terms)):
     title_source = title_source.strip().upper()
     if i <= 990:
         # Set a number here, you may need to run this program multiple times
-        continue
+        pass
 
     #search_term = "Reconstituted postsynaptic density as a molecular platform for understanding synapse formation and plasticity"
     print(f"Pubmed search for {i}th article:\n#######################")
@@ -94,7 +98,7 @@ for i in range(len(search_terms)):
     results2 = pubmed._getArticleIds(query=search_term, max_results=10)
     if len(list(results2)) > 0:
         pubmed.parameters["db"] = "pubmed"
-        results3 = pubmed._getArticles(article_ids=results3)
+        results3 = pubmed._getArticles(article_ids=results2)
         for result in results3:
             articleDict = result.toDict()
             print(articleDict['title'])  # title_pubmed = article['title']
@@ -122,7 +126,7 @@ for i in range(len(search_terms)):
         #    initau_pubmed = " "
         #initau_pubmed = initau_pubmed.strip()
         title_pubmed = article['title']
-        pubmedId = article['pubmed_id'].partition('\n')[0]
+        pubmedId = str(article['pubmed_id'].partition('\n')[0])
         #print("Current search result:")
         # print(title_pubmed)
         # print("authors")
@@ -138,11 +142,11 @@ for i in range(len(search_terms)):
             print(au_pub)
             print("-----------------------\n")
             my_dict = {u'index_source': i,
-                       u'pubmed_id': pubmedId,
+                       u'pubmed_id': str(pubmedId),
                        u'title_pub': article['title'],
                        u'title_source': title_terms[i],
                        u'authors_pub': au_pub,
-                       u'clusterid_google': id_terms[i],
+                       u'clusterid_google': str(id_terms[i]),
                        u'titleMatch': 'High'
                        }
             articleInfo.append(my_dict)
@@ -158,11 +162,11 @@ for i in range(len(search_terms)):
             print(au_pub)
             print("-----------------------\n")
             my_dict = {u'index_source': i,
-                       u'pubmed_id': pubmedId,
+                       u'pubmed_id': str(pubmedId),
                        u'title_pub': article['title'],
                        u'title_source': title_terms[i],
                        u'authors_pub': au_pub,
-                       u'clusterid_google': id_terms[i],
+                       u'clusterid_google': str(id_terms[i]),
                        u'titleMatch': 'Low'
                        }
             articleInfo.append(my_dict)
@@ -192,7 +196,7 @@ for i in range(len(search_terms)):
                    u'title_pub': "",
                    u'title_source': title_terms[i],
                    u'authors_pub': "",
-                   u'clusterid_google': id_terms[i],
+                   u'clusterid_google': str(id_terms[i]),
                    u'titleMatch': 'None'
                    }
         articleInfo.append(my_dict)

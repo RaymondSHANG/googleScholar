@@ -1,5 +1,5 @@
 '''
-input:data/allcitation_final_modify.csv
+input:data/allcitation_final.csv
 output:data/allcitation_final2.csv
 This program is to re-analyze the self-citations,after all those works done by pubmed websearch and mannual corrections
 For each paper id, we hava a dict with clusterid:authors
@@ -19,7 +19,7 @@ import numpy as np
 #url_all = pubs.loc[:,'url']
 #url_all = url_all.tolist()
 allcitations = pd.read_csv(
-    "data/allcitation_final_modify.csv", header=0)  # ,nrows=2
+    "data/allcitation_final.csv", header=0)  # ,nrows=2
 print(allcitations.shape)
 # print(allcitations.columns)
 # ['id_source', 'title_source', 'authors_source', 'url_source',
@@ -121,7 +121,7 @@ for i in range(allcitations.shape[0]):
 
 print("selfcitations:\t" + str(n_self))
 print("othercitations:\t" + str(n_other))
-if False:
+if True:
     allcitations['authoerOverlaps'] = citationmarker1
     allcitations['selfcitations'] = citationmarker2
     allcitations.to_csv("data/allcitation_final2.csv", index=False)
