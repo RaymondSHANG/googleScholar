@@ -21,7 +21,8 @@ import requests
 import re
 from bs4 import BeautifulSoup
 
-parameters_user = pd.read_json('parameters.txt', orient='records', lines=True)
+parameters_user = pd.read_json(
+    'data/parameters.txt', orient='records', lines=True)
 pubemail = str(parameters_user.loc[0, 'pubemail']).strip()
 my_api_key = str(parameters_user.loc[0, 'api_key']).strip()
 

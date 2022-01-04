@@ -19,7 +19,8 @@ import random
 from bs4 import BeautifulSoup
 import pandas as pd
 
-parameters_user = pd.read_json('parameters.txt', orient='records', lines=True)
+parameters_user = pd.read_json(
+    'data/parameters.txt', orient='records', lines=True)
 gid = str(parameters_user.loc[0, 'gid']).strip()
 
 driver = webdriver.Chrome("/usr/local/bin/chromedriver")
