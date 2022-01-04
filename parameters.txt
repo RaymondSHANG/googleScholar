@@ -1,3 +1,0 @@
-{"gid":"WPvhXPEAAAAJ"
-"pubemail":"yshang@email.arizona.edu"
-"api_key":"5f2915a6f64423e63e34e3002b25f4f9bf08"}
