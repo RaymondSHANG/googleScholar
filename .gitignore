@@ -1,3 +1,4 @@
-*.txt
 *.csv
 data/*
+.DS_Store
+.vscode/*
