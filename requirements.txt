@@ -1,0 +1,5 @@
+1. selenium python package
+2. webchrome (version matching your chrome browser)
+3. ncbi account and api_key number
+4. pymed package
+6. Other python packages
